@@ -4,5 +4,12 @@
       <li><a href="{{ url_for('pages.about') }}">About</a></li>
       <li><a href="{{ url_for('posts.posts') }}">All Posts</a></li>
       <li><a href="{{ url_for('posts.new') }}">Add Post</a></li>
+      {% if not current_user.is_authenticated %}
+      <li><a href="{{ url_for('author.login') }}">Login</a></li>
+      <li><a href="{{ url_for('author.signup') }}">Signup</a></li>
+      {% endif %}
+      {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('author.logout') }}">Logout</a></li>
+      {% endif %}
     </ul>
   </nav>

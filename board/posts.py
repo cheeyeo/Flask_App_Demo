@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_required, current_user
 from board.databaseorm import db
 from board.databaseorm import Article, Author
 
@@ -7,19 +8,19 @@ bp = Blueprint('posts', __name__)
 
 
 @bp.route('/posts/new', methods=['GET'])
+@login_required
 def new():
     return render_template('posts/create.html')
 
 
 @bp.route('/posts', methods=['POST'])
+@login_required
 def create():
-    print(f'PARAMS: {request.form}')
-
     article = Article(
         title=request.form['title'],
         slug=request.form['slug'],
         content=request.form['content'],
-        author_id=1
+        author_id=current_user.id
     )
 
     db.session.add(article)

@@ -47,12 +47,17 @@ https://medium.com/@yahiaqous/how-to-build-a-crud-api-using-python-flask-and-sql
 
 Refactor to use Flask-sqlalchemy:
 
+https://docs.sqlalchemy.org/en/20/orm/mapped_attributes.html#using-custom-datatypes-at-the-core-level
+
 https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/
 
 
 Add user login functionality:
 
 ( for in db authentication where user stored in db ):
+
+https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
+
 
 https://flask-login.readthedocs.io/en/latest/
 
@@ -62,7 +67,15 @@ https://github.com/CloudySnake/flask-cognito-integration
 
 
 
-On migrations
+On migrations:
+
+`create_all()` doesn't recreate db tables if they already exists 
+
+
+therefore need to add some kind of migration system:
+
+
+
 
 https://medium.com/@johnidouglasmarangon/using-migrations-in-python-sqlalchemy-with-alembic-docker-solution-bd79b219d6a
 
