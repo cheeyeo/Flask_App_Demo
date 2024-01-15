@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h2>{% block title %}My Profile{% endblock title %}</h2>
+{% endblock header %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('author.profile') }}">
+    <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" id="first_name" class="form-control" value="{{ current_user.firstname }}">
+    </div>
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" id="last_name" class="form-control" value="{{ current_user.lastname }}">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Your email" value="{{ current_user.email }}">
+    </div>
+    <div class="form-group">
+      <label for="password">New Password</label>
+      <input type="password" name="password" id="password" class="form-control" placeholder="Your password">
+  </div>
+  <div class="form-group">
+        <input type="submit" value="Update Profile" class="submit-btn">
+    </div>
+</form>
+{% endblock content %}

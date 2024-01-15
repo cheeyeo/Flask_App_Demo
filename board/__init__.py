@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from board import author, pages, posts
 from board.databaseorm import db, Author
 
@@ -12,6 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://chee:example@172.18.0.2:5432/example'
     
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     with app.app_context():
         db.create_all()

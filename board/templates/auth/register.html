@@ -1,15 +1,10 @@
 {% extends 'base.html' %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-    <div class="notification is-danger">
-        {{ messages[0] }}
-    </div>
-{% endif %}
-{% endwith %}
+{% block header %}
+  <h2>{% block title %}Sign Up{% endblock title %}</h2>
+{% endblock header %}
 
 {% block content %}
-{{ get_flashed_messages() }}
   <form method="post" action="{{ url_for('author.signup') }}">
     <div class="form-group">
         <label for="firstname">First Name</label>

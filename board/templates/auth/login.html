@@ -1,20 +1,10 @@
 {% extends 'base.html' %}
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
-{% endwith %}
+{% block header %}
+  <h2>{% block title %}Login{% endblock title %}</h2>
+{% endblock header %}
 
 {% block content %}
-  <p>
-
-    {{ get_flashed_messages() }}
-  </p>
   <form method="post" action="{{ url_for('author.login') }}">
     <div class="form-group">
         <label for="email">Email</label>

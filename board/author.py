@@ -1,11 +1,35 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from flask_login import logout_user, login_required, login_user
+from flask_login import logout_user, login_required, login_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from board.databaseorm import db
 from board.databaseorm import Author
 
 
 bp = Blueprint('author', __name__)
+
+
+@bp.route('/profile', methods=['GET'])
+@login_required
+def profile():
+    return render_template('auth/profile.html')
+
+
+@bp.route('/profile', methods=['POST'])
+@login_required
+def update_profile():
+    current_user.firstname = request.form.get('first_name', current_user.firstname)
+    current_user.lastname = request.form.get('last_name', current_user.lastname)
+    current_user.email = request.form.get('email', current_user.email)
+
+    new_password = request.form.get('password')
+    if new_password:
+        current_user.password = generate_password_hash(new_password, method='scrypt')
+
+    db.session.commit()
+
+    flash('Profile updated!')
+
+    return render_template('auth/profile.html')
 
 
 @bp.route('/login', methods=['GET'])
@@ -21,7 +45,7 @@ def login_user_fn():
     user = db.session.execute(
         db.select(Author)
         .filter_by(email=email_input)
-    ).scalar_one()
+    ).scalar()
 
     if not user or not check_password_hash(user.password, password_input):
         flash('Password or email not match')
@@ -43,15 +67,10 @@ def signup_user():
     last_name = request.form.get('lastname')
     password_input = request.form.get('password')
 
-    try:
-        user = db.session.execute(
+    user = db.session.execute(
             db.select(Author)
             .filter_by(email=email_input)
-        ).scalar_one()
-    except Exception as e:
-        print(e, type(e))
-        user = None
-
+    ).scalar()
 
     print(f'USER: {user}')
 

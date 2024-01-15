@@ -75,6 +75,9 @@ On migrations:
 therefore need to add some kind of migration system:
 
 
+https://flask-migrate.readthedocs.io/en/latest/
+
+
 
 
 https://medium.com/@johnidouglasmarangon/using-migrations-in-python-sqlalchemy-with-alembic-docker-solution-bd79b219d6a

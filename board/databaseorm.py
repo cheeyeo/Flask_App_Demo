@@ -33,12 +33,6 @@ class Author(UserMixin, Base):
 
     def __repr__(self) -> str:
         return f"Author(id={self.id!r}, email={self.email!r}, fullname={self.firstname!r} {self.lastname!r})"
-    
-
-    @property
-    def is_active(self):
-        return True
-
 
 
 class Article(Base):
