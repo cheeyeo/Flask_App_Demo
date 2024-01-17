@@ -78,23 +78,27 @@ def signup_user():
     if user is not None:
         flash('User already exists! Please login', category='error')
     else:
-        # if user doesn't exist create and add to db
-        user = Author(
-            firstname=first_name,
-            lastname=last_name,
-            email=email_input,
-            password=generate_password_hash(password_input, method='scrypt')
-        )
+        try:
+            # if user doesn't exist create and add to db
+            user = Author(
+                firstname=first_name,
+                lastname=last_name,
+                email=email_input,
+                password=generate_password_hash(password_input, method='scrypt')
+            )
 
-        DB.session.add(user)
-        DB.session.commit()
-        flash('Account created successfully. Please login.', category='success')
-
-    return redirect(url_for('author.login'))
+            DB.session.add(user)
+            DB.session.commit()
+            flash('Account created successfully. Please login.', category='success')
+            return redirect(url_for('author.login'))
+        except AssertionError as e:
+            flash(f'User signup failed due to following: {e}', category='error')
+            return render_template('auth/register.html')
 
 
 @bp.route('/logout')
 @login_required
 def logout():
     logout_user()
+    flash('Logged out', category='success')
     return redirect(url_for('pages.home'))

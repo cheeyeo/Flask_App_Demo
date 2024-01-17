@@ -16,17 +16,21 @@ def new():
 @bp.route('/posts', methods=['POST'])
 @login_required
 def create():
-    article = Article(
-        title=request.form['title'],
-        content=request.form['content'],
-        author_id=current_user.id
-    )
+    try:
+        article = Article(
+            title=request.form['title'],
+            content=request.form['content'],
+            author_id=current_user.id
+        )
 
-    DB.session.add(article)
-    DB.session.commit()
+        DB.session.add(article)
+        DB.session.commit()
 
-    flash("Post created successfully!", category="success")
-    return redirect(url_for("posts.posts"))
+        flash("Post created successfully!", category="success")
+        return redirect(url_for("posts.posts"))
+    except AssertionError as e:
+        flash(f'Post not created: {e}', category='error')
+        return render_template('posts/create.html')
 
 
 @bp.route('/posts')
@@ -44,7 +48,7 @@ def posts():
             'title': article.title,
             'content': article.content,
             'created_on': article.created_on,
-            'author': f'{author.firstname} {author.lastname}'
+            'author': author.fullname()
         })
 
     return render_template('posts/posts.html', posts=posts)

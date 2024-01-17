@@ -90,6 +90,14 @@ https://medium.com/@yahiaqous/how-to-build-a-crud-api-using-python-flask-and-sql
 
 ### TODO:
 
+Validation for SQLAlchemy ORM models:
+
+https://ed-a-nunes.medium.com/field-validation-for-backend-apis-with-python-flask-and-sqlalchemy-30e8cc0d260c
+
+
+
+
+
 Refactor to use Flask-sqlalchemy:
 
 https://docs.sqlalchemy.org/en/20/orm/mapped_attributes.html#using-custom-datatypes-at-the-core-level
