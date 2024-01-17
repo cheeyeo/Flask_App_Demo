@@ -3,6 +3,10 @@
 
 https://realpython.com/flask-project/
 
+https://realpython.com/flask-logging-messages/
+
+
+
 Creating a generic(?) flask project structure
 
 
@@ -10,6 +14,47 @@ To run:
 ```
 python -m flask --app board run --port 8000 --debug
 ```
+
+
+### DATABASE MIGRATIONS
+
+Handled by alembic
+
+To generate baseline migrations for all the models' tables:
+
+```
+alembic revision --autogenerate -m 'Create baseline migrations
+```
+
+To run migration:
+```
+alembic upgrade head
+```
+
+Useful Alembic commands:
+
+* Display the current revision for a database: `alembic current`
+
+* View migrations history: `alembic history --verbose`
+
+* Revert all migrations: `alembic downgrade base`
+
+* Revert migrations one by one: `alembic downgrade -1`
+
+* Apply all migrations: `alembic upgrade head`
+
+* Apply migrations one by one: `alembic upgrade +1`
+
+* Display all raw SQL: `alembic upgrade head --sql`
+
+* Reset the database: `alembic downgrade base && alembic upgrade head`
+
+
+More [Alembic commands]
+
+[Alembic commands]: https://alembic.sqlalchemy.org/en/latest/api/commands.html
+
+
 
 
 ### DATABASE NOTES

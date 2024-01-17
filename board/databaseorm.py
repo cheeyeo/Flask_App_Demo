@@ -16,8 +16,7 @@ class Base(DeclarativeBase):
     pass
 
 
-db = SQLAlchemy(model_class=Base)
-
+DB = SQLAlchemy(model_class=Base)
 
 class Author(UserMixin, Base):
     __tablename__ = "authors"
@@ -39,7 +38,6 @@ class Article(Base):
     __tablename__ = "articles"
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
-    slug: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     created_on: Mapped[Optional[datetime]] = mapped_column(DateTime(), default=datetime.now)
     updated_on: Mapped[Optional[datetime]] = mapped_column(DateTime(), default=datetime.now, onupdate=datetime.now)
@@ -47,5 +45,3 @@ class Article(Base):
     author_id: Mapped[int] = mapped_column(Integer(), ForeignKey("authors.id"), nullable=False)
 
     author: Mapped[Author] = relationship(back_populates="articles")
-
-

@@ -1,22 +1,27 @@
+import os
 from flask import Flask
 from flask_login import LoginManager
-from flask_migrate import Migrate
-from board import author, pages, posts
-from board.databaseorm import db, Author
+from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
+from board import author, pages, posts, errors
+from board.databaseorm import DB, Base, Author
+
+
+load_dotenv()
 
 
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'example-secret-key'
+    app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
     app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://chee:example@172.18.0.2:5432/example'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI')
     
-    db.init_app(app)
-    migrate = Migrate(app, db)
+    # Setup db
+    DB.init_app(app)
 
     with app.app_context():
-        db.create_all()
+        DB.create_all()
 
 
     login_manager = LoginManager()
@@ -25,11 +30,11 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        print(f'INSIDE LOAD USER: {user_id}')
-        user = db.session.execute(
-            db.select(Author)
+        # print(f'INSIDE LOAD USER: {user_id}')
+        user = DB.session.execute(
+            DB.select(Author)
             .filter_by(id=user_id)
-        ).scalar_one()
+        ).scalar()
     
         return user
 
@@ -37,5 +42,6 @@ def create_app():
     app.register_blueprint(pages.bp)
     app.register_blueprint(posts.bp)
     app.register_blueprint(author.bp)
+    app.register_error_handler(404, errors.page_not_found)
     
     return app

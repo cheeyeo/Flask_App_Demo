@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import logout_user, login_required, login_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from board.databaseorm import db
-from board.databaseorm import Author
+from flask_sqlalchemy import SQLAlchemy
+from board.databaseorm import DB, Author
 
 
 bp = Blueprint('author', __name__)
@@ -25,9 +25,9 @@ def update_profile():
     if new_password:
         current_user.password = generate_password_hash(new_password, method='scrypt')
 
-    db.session.commit()
+    DB.session.commit()
 
-    flash('Profile updated!')
+    flash('Profile updated!', category='success')
 
     return render_template('auth/profile.html')
 
@@ -42,16 +42,17 @@ def login_user_fn():
     email_input = request.form.get('email')
     password_input = request.form.get('password')
 
-    user = db.session.execute(
-        db.select(Author)
+    user = DB.session.execute(
+        DB.select(Author)
         .filter_by(email=email_input)
     ).scalar()
 
     if not user or not check_password_hash(user.password, password_input):
-        flash('Password or email not match')
+        flash('Password or email not match', category='error')
         return redirect(url_for('author.login'))
     else:
         login_user(user)
+        flash('Logged in successfully', category='success')
         return redirect(url_for('pages.home'))
 
 
@@ -67,15 +68,15 @@ def signup_user():
     last_name = request.form.get('lastname')
     password_input = request.form.get('password')
 
-    user = db.session.execute(
-            db.select(Author)
+    user = DB.session.execute(
+            DB.select(Author)
             .filter_by(email=email_input)
     ).scalar()
 
     print(f'USER: {user}')
 
     if user is not None:
-        flash('User already exists! Please login')
+        flash('User already exists! Please login', category='error')
     else:
         # if user doesn't exist create and add to db
         user = Author(
@@ -85,8 +86,9 @@ def signup_user():
             password=generate_password_hash(password_input, method='scrypt')
         )
 
-        db.session.add(user)
-        db.session.commit()
+        DB.session.add(user)
+        DB.session.commit()
+        flash('Account created successfully. Please login.', category='success')
 
     return redirect(url_for('author.login'))
 

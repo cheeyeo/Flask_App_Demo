@@ -9,7 +9,7 @@
     <article>
       <h4>{{ post["title"] }}</h4>
       <p class="message">{{ post["content"] }}<p>
-      <aside>Posted by {{ post["author"] }} on {{ post["created_on"].strftime("%b %d, %Y at %I:%M%p") }}</aside>
+      <aside>Posted by {{ post["author"] }} on {{ post["created_on"].strftime("%b %d %Y at %H:%M%p") }}</aside>
     </article>
   {% endfor %}
 {% endblock content %}

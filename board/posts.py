@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from board.databaseorm import db
-from board.databaseorm import Article, Author
+from flask_sqlalchemy import SQLAlchemy
+from board.databaseorm import DB, Article, Author
 
 
 bp = Blueprint('posts', __name__)
@@ -18,14 +18,14 @@ def new():
 def create():
     article = Article(
         title=request.form['title'],
-        slug=request.form['slug'],
         content=request.form['content'],
         author_id=current_user.id
     )
 
-    db.session.add(article)
-    db.session.commit()
+    DB.session.add(article)
+    DB.session.commit()
 
+    flash("Post created successfully!", category="success")
     return redirect(url_for("posts.posts"))
 
 
@@ -33,8 +33,8 @@ def create():
 def posts():
     posts = []
 
-    res = db.session.execute(
-        db.select(Article, Author)
+    res = DB.session.execute(
+        DB.select(Article, Author)
         .join(Article.author)
         .order_by(Article.created_on.desc())
     ).all()
