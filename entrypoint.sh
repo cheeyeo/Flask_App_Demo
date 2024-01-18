@@ -1,0 +1,5 @@
+#!/bin/bash
+
+alembic upgrade head
+
+flask --app board run --host 0.0.0.0 --port 8000

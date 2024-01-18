@@ -156,9 +156,12 @@ https://medium.com/@johnidouglasmarangon/using-migrations-in-python-sqlalchemy-w
 [sqlalchemy custom datatypes]: https://docs.sqlalchemy.org/en/20/orm/mapped_attributes.html#using-custom-datatypes-at-the-core-level
 
 
-### TODO:
+[On using depends_on condition]: https://www.warp.dev/terminus/docker-compose-depends-on
 
-* Create dockerfile for application and add to compose config
+[Using docker-compose for local Flask dev]: https://dev.to/pacheco/dockerize-a-flask-app-and-debug-with-vscode-34i1
+
+
+### TODO:
 
 * Fix / update validation for models 
 

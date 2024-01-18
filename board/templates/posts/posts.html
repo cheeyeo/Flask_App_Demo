@@ -6,10 +6,12 @@
 
 {% block content %}
   {% for post in posts %}
-    <article>
-      <h4>{{ post["title"] }}</h4>
-      <p class="message">{{ post["content"] }}<p>
-      <aside>Posted by {{ post["author"] }} on {{ post["created_on"].strftime("%b %d %Y at %H:%M%p") }}</aside>
-    </article>
+      <article>
+        <h4>{{ post["title"] }}</h4>
+        <p class="message">{{ post["content"] }}<p>
+        <aside>Posted by {{ post["author"] }} on {{ post["created_on"].strftime("%b %d %Y at %H:%M%p") }}</aside>
+      </article>
+  {% else %}
+    <p>No posts found! <a href="{{ url_for('posts.new') }}">Click to add a Post</a></p>
   {% endfor %}
 {% endblock content %}

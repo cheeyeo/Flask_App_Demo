@@ -1,5 +1,5 @@
 services:
-  db:
+  pg:
     image: postgres
     env_file: .env
     restart: always
@@ -8,10 +8,31 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init/role.sh:/docker-entrypoint-initdb.d/init-database.sh
+  web:
+    build:
+      context: .
+      dockerfile: 'board/Dockerfile'
+      # target: base
+      target: prod
+    env_file: .env
+    restart: always
+    links:
+      - pg:pg
+    stop_signal: SIGINT
+    ports:
+      - '8000:8000'
+    depends_on:
+      pg:
+        condition: service_healthy
+    # volumes:
+    #   - ./board:/board
+    #   - ./migrations:/migrations
+    # environment:
+    #   FLASK_DEBUG: 1
 
 volumes:
   pgdata:
