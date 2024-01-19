@@ -16,8 +16,7 @@ services:
     build:
       context: .
       dockerfile: 'board/Dockerfile'
-      # target: base
-      target: prod
+      target: base
     env_file: .env
     restart: always
     links:
@@ -28,11 +27,11 @@ services:
     depends_on:
       pg:
         condition: service_healthy
-    # volumes:
-    #   - ./board:/board
-    #   - ./migrations:/migrations
-    # environment:
-    #   FLASK_DEBUG: 1
+    volumes:
+      - ./board:/board
+      - ./migrations:/migrations
+    environment:
+      FLASK_DEBUG: 1
 
 volumes:
   pgdata:

@@ -11,9 +11,15 @@ RUN pip install -r requirements.txt
 
 ENTRYPOINT ["./entrypoint.sh"]
 
-FROM base as prod
 # Production image
+FROM base as prod
+
 RUN pip install gunicorn
-COPY . .
-COPY ../migrations /migrations
-ENTRYPOINT ["gunicorn", "--reload", "-w", "4", "--bind", "0.0.0.0:8000", "board:create_app()"]
+
+
+COPY board/ /board
+COPY migrations/ /migrations
+
+EXPOSE 8000
+
+ENTRYPOINT ["gunicorn", "--access-logfile=-", "-w", "4", "--bind", "0.0.0.0:8000", "board:create_app()"]

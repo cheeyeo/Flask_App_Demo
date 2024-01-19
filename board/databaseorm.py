@@ -24,8 +24,8 @@ class Author(UserMixin, Base):
     __tablename__ = "authors"
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
-    firstname: Mapped[str] = mapped_column(String(100))
-    lastname: Mapped[str] = mapped_column(String(100))
+    firstname: Mapped[str] = mapped_column(String(100), nullable=False)
+    lastname: Mapped[str] = mapped_column(String(100), nullable=False)
     email: Mapped[str] = mapped_column(String(255), nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     joined: Mapped[datetime] = mapped_column(DateTime(), default=datetime.now)
@@ -89,7 +89,7 @@ class Article(Base):
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     created_on: Mapped[Optional[datetime]] = mapped_column(DateTime(), default=datetime.now)
     updated_on: Mapped[Optional[datetime]] = mapped_column(DateTime(), default=datetime.now, onupdate=datetime.now)
-    content: Mapped[Text] = mapped_column(Text)
+    content: Mapped[Text] = mapped_column(Text, nullable=False)
     author_id: Mapped[int] = mapped_column(Integer(), ForeignKey("authors.id"), nullable=False)
 
     author: Mapped[Author] = relationship(back_populates="articles")

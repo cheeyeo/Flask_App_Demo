@@ -17,19 +17,23 @@ def profile():
 @bp.route('/profile', methods=['POST'])
 @login_required
 def update_profile():
-    current_user.firstname = request.form.get('first_name', current_user.firstname)
-    current_user.lastname = request.form.get('last_name', current_user.lastname)
-    current_user.email = request.form.get('email', current_user.email)
+    try:
+        current_user.firstname = request.form.get('first_name', current_user.firstname)
+        current_user.lastname = request.form.get('last_name', current_user.lastname)
+        current_user.email = request.form.get('email', current_user.email)
 
-    new_password = request.form.get('password')
-    if new_password:
-        current_user.password = generate_password_hash(new_password, method='scrypt')
+        new_password = request.form.get('password')
+        if new_password:
+            current_user.password = generate_password_hash(new_password, method='scrypt')
 
-    DB.session.commit()
+        DB.session.commit()
 
-    flash('Profile updated!', category='success')
+        flash('Profile updated!', category='success')
 
-    return render_template('auth/profile.html')
+        return render_template('auth/profile.html')
+    except AssertionError as e:
+        flash(f'Profile not updated: {e}', category='error')
+        return render_template('auth/profile.html')
 
 
 @bp.route('/login', methods=['GET'])

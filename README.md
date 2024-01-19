@@ -3,58 +3,52 @@
 
 A simple messageboard project built in Flask with a Postgresql backend.
 
+It's running in dev mode locally via docker compose
+
 Uses:
 
 * Flask web framework
 * SQLAlchemy and flask-sqlalchemy for ORM
 * alembic for database migrations
 * flask-login for user logins
-* Docker and docker compose for postgresql db
+* Docker and docker compose for application and postgresql db
 
 
 
-### To run locally:
+### To run locally with docker-compose:
 
 Copy `.env.example` to `.env` and fill in required env vars
 
-Create a virtual env and install required deps:
-```
-python3 -m venv webvenv
-
-source webvenv/bin/activate
-
-pip install -r requirements.txt
-```
-
-
-To start DB in terminal:
+To start both application and DB in terminal:
 ```
 docker compose -f compose.yaml up
 ```
 
-It will create a persistent volume for the database data.
+This will start up the postgresql DB first and after reaching a successful healthcheck, it will start the web application.
 
+It creates a persistent docker volume for the database data.
 
-In another terminal, run the database migrations :
-```
-alembic upgrade head
-```
-
-To start app in another terminal:
-```
-python -m flask --app board run --port 8000 --debug
-```
-
-
-Browse to localhost:8080 to interact with the app.
+The base database migration is ran automatically via `entrypoint.sh` script which is set as the enrtypoint for the dev image.
 
 
 If changes are made to the database models, you need to generate a new migration using:
 ```
-alembic revision --autogenerate -m 'REASON FOR NEW MIGRATION'
+docker exec messageboard-web-1 alembic revision --autogenerate -m 'REASON FOR NEW MIGRATION'
 
-alembic upgrade head
+docker exec messageboard-web-1 alembic upgrade head
 ```
+
+If changes are made to the web app, it will reload the application code.
+
+
+
+### Building production image
+
+To build production docker image, from the root folder, run:
+```
+docker build -t web:latest -f board/Dockerfile --target prod .
+```
+
 
 
 ### DATABASE MIGRATIONS
@@ -107,6 +101,12 @@ Then:
 ```
 pip install pyscopg2
 ```
+
+To install without any system deps:
+```
+pip install pyscopg2-binary
+```
+
 
 * To connect to running postgresql container:
 ```
