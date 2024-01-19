@@ -165,6 +165,8 @@ https://medium.com/@johnidouglasmarangon/using-migrations-in-python-sqlalchemy-w
 
 * Fix / update validation for models 
 
+* Deploy to AWS ECS in cluster with ALB + RDS
+
 * Try AWS Cognito for user authentication?
 
   https://github.com/CloudySnake/flask-cognito-integration
