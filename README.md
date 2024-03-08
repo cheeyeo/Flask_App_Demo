@@ -17,10 +17,12 @@ Uses:
 
 ### To run locally with docker-compose:
 
-Copy `.env.example` to `.env` and fill in required env vars
+Copy `.env.example` to `.env` and fill in required env vars.
 
 To start both application and DB in terminal:
 ```
+source .env
+
 docker compose -f compose.yaml up
 ```
 
